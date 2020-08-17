@@ -2,11 +2,11 @@
 #define COMUNICACAO_H_
 #include "tipos.h"
 
-/* Realiza a comunicacao entre a simulacao e o software por meio de
- * leitura/escrita de arquivos. (Coloque o caracter de fim de comando ";") */
 void limpar_arquivo(char*);
-void init();
-char* comunicacao(char*);
+//Espera uma entrada de dados e retorna ao receber
+char* aguardar_comando();
+//Envia dados para a simulção e retorna a resposta (Coloque o caracter de fim de comando ";") 
+char* mandar_comando(char*);
 
 /*Limpa o arquivo*/
 #endif  // COMUNICACAO_H_
