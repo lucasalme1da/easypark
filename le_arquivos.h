@@ -4,6 +4,8 @@
 
 /* Lê os dados dos arquivos que contém as informações das "vagas" e dos
  "destinos" e popula os vetores recebidos. */
-void le_arquivos(Destino*, Vaga*);
+//void le_arquivos(Destino*, Vaga*);
+Destino* le_destino();
+Vaga* le_vagas();
 
 #endif  // LE_ARQUIVOS_H_
