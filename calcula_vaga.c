@@ -60,7 +60,7 @@ Vaga* calcula_vaga(Destino destino_input, Vaga* vetor_vagas) {
   vagas[0].sensor.id = 1;
   vagas[0].distancia_euclidiana = -1;
 
-  strcpy(vagas[1].nome, "a02");
+  strcpy(vagas[1].nome, "a05");
   vagas[1].ponto.x = 219.00;
   vagas[1].ponto.y = 100.00;
   vagas[1].ponto.z = 1.00;
