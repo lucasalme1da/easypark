@@ -22,7 +22,7 @@ typedef struct {
 } Vaga;
 
 typedef struct {
-  char nome[10];
+  char nome[100];
   Ponto ponto;
 } Destino;
 

@@ -1,0 +1,2 @@
+# ignorando main.exe pois a cada nova compilação um novo executável é gerado causando diferença nos arquivos
+*.exe
