@@ -72,3 +72,9 @@ char* aguardar_comando(){
 void limpar_arquivo(char* arquivo){
     fclose(fopen(arquivo,"w"));
 }
+  // char comando[] = "estado sensor 1;";
+  // char* resposta = mandar_comando(comando);
+  // printf("Comando Recebido: %s \n",resposta);
+
+  // char* novo_comando = aguardar_comando();
+  // printf("Comando recebido: %s\n",novo_comando);
