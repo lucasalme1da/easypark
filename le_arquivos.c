@@ -1,5 +1,4 @@
 #include "le_arquivos.h"
-
 #include <string.h>
 
 int conta_linhas_destinos() {
@@ -41,7 +40,7 @@ int conta_linhas_vagas() {
 }
 
 Destino* le_destino() {
-  // Chama função para contar número de vagas (número de linhas no arquivo)
+  // Chama função para contar número de destinos (número de linhas no arquivo)
   int linhas = conta_linhas_destinos();
   // Leitura do arquivo de entrada
   FILE* arquivo;
