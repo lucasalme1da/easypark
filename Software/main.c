@@ -2,11 +2,15 @@
 
 #include "string.h"
 int main(void) {
-  // le_arquivos(&d, &v);
-  // le_input(&d);
-  // calcula_vaga(d, &v);
-  // verifica_vaga(&v);
-  // exibe_info("jarrada");
-  // comunicacao("dados");
-  return (0);
+  Destino *destinos = le_destino();
+
+  Vaga *vagas = le_vagas();
+
+  Destino destino = le_input(destinos, conta_linhas_destinos());
+
+  Vaga *ranking_de_vagas = calcula_vaga(destino, vagas);
+
+  Vaga vaga_disponivel = verifica_vaga(ranking_de_vagas);
+
+  exibe_info(vaga_disponivel);
 }

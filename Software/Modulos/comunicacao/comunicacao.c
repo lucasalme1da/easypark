@@ -6,8 +6,8 @@
 #define FALSE -1
 #endif
 #define CARACTER_FIM_DE_COMANDO 59  //;
-char* nome_arquivo_envio_de_comando_sync = "../../escrita";
-char* nome_arquivo_recebimento_de_comando_sync = "../../leitura";
+char* nome_arquivo_envio_de_comando_sync = "escrita";
+char* nome_arquivo_recebimento_de_comando_sync = "leitura";
 // Como testar ***
 // Para testar a funcao comunicação deve ser capaz de recever uma string
 // e escrever esta string no arquivo designado para a escrita
