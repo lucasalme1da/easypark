@@ -2,7 +2,7 @@
 
 #include <string.h>
 
-#include "le_arquivos.h"
+#include "../le_arquivos/le_arquivos.h"
 
 int buscar_posicao_da_melhor_vaga(Vaga* ranking_de_vagas, int numero_de_vagas) {
   for (int i = 0; i < numero_de_vagas; i++) {

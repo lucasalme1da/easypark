@@ -1,10 +1,11 @@
-#include "le_arquivos.h"
+#include "../le_arquivos/le_arquivos.h"
+
 #include <string.h>
 
 int conta_linhas_destinos() {
   int linhas = 1;
   FILE* arquivo;
-  arquivo = fopen("destinos.txt", "r");
+  arquivo = fopen("../../Dados/destinos.txt", "r");
   if (arquivo == NULL) {
     printf("Erro ao abrir o arquivo!");
     return 0;
@@ -23,7 +24,7 @@ int conta_linhas_destinos() {
 int conta_linhas_vagas() {
   int linhas = 1;
   FILE* arquivo;
-  arquivo = fopen("vagas.txt", "r");
+  arquivo = fopen("../../Dados/vagas.txt", "r");
   if (arquivo == NULL) {
     printf("Erro ao abrir o arquivo!");
     return 0;
@@ -44,7 +45,7 @@ Destino* le_destino() {
   int linhas = conta_linhas_destinos();
   // Leitura do arquivo de entrada
   FILE* arquivo;
-  arquivo = fopen("destinos.txt", "r");
+  arquivo = fopen("../../Dados/destinos.txt", "r");
   if (arquivo == NULL) {
     printf("Erro ao abrir o arquivo!");
     return 0;
@@ -69,7 +70,7 @@ Vaga* le_vagas() {
   int linhas = conta_linhas_vagas();
   // Leitura do arquivo de entrada
   FILE* arquivo;
-  arquivo = fopen("vagas.txt", "r");
+  arquivo = fopen("../../Dados/vagas.txt", "r");
   if (arquivo == NULL) {
     printf("Erro ao abrir o arquivo!");
     return 0;

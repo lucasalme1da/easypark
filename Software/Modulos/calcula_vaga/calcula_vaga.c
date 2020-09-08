@@ -3,7 +3,7 @@
 #include <math.h>
 #include <string.h>
 
-#include "le_arquivos.h"
+#include "../le_arquivos/le_arquivos.h"
 
 void listar_vagas(Vaga* vagas) {
   int numero_de_vagas = conta_linhas_vagas();

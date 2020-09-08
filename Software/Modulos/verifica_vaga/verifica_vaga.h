@@ -1,6 +1,6 @@
 #ifndef VERIFICA_VAGA_H_
 #define VERIFICA_VAGA_H_
-#include "tipos.h"
+#include "../../tipos.h"
 
 /* Faz uma busca pelo vetor recebido verificando um por um se o sensor
  * referenciado aponta ocupado. Caso não estiver, devolve a vaga em que o sensor
