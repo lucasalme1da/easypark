@@ -17,6 +17,8 @@ app.on('ready', () => {
   });
   mainWindow.loadURL(`file://${__dirname}/index.html`);
 
+  mainWindow.maximize()
+
   const menu = Menu.buildFromTemplate(mainMenuTemplate);
   Menu.setApplicationMenu(menu);
 });
