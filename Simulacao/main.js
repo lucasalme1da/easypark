@@ -46,27 +46,28 @@ export default class main {
 
     this.modelo.carregarEstacionamento()
 
-    this.modelo.carregarPlano().then((plano) => {
-      this.nos = []
+    const plano = await this.modelo.carregarPlano()
 
-      this.interface = new InterfaceAStar({
-        nomeAtributoPosicao: 'posicao',
-        nomeAtributoConexoes: 'vizinhos',
-        funcaoConectarNos: (primeiroNo, segundoNo) => {
-          primeiroNo.conectarNos(segundoNo)
-        },
-        funcaoAdicionaNos: (posicao) => {
-          const no = new No(posicao)
-          this.nos.push(no)
-          return no
-        },
-        nos: this.nos,
-        camera: this.camera,
-        cena: this.scene,
-        base: plano,
-        canvas: this.canvas
-      })
+    this.nos = []
+
+    this.interface = new InterfaceAStar({
+      nomeAtributoPosicao: 'posicao',
+      nomeAtributoConexoes: 'vizinhos',
+      funcaoConectarNos: (primeiroNo, segundoNo) => {
+        primeiroNo.conectarNos(segundoNo)
+      },
+      funcaoAdicionaNos: (posicao) => {
+        const no = new No(posicao)
+        this.nos.push(no)
+        return no
+      },
+      nos: this.nos,
+      camera: this.camera,
+      cena: this.scene,
+      base: plano,
+      canvas: this.canvas
     })
+
 
     this.animate()
   }
