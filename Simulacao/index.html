@@ -16,124 +16,48 @@
 
     }
 
-    .testando {
-      font-family: 'Poppins', sans-serif;
-      width: 15vw;
-      height: 100vh;
-      background: #141E30;
-      /* fallback for old browsers */
-      background: -webkit-linear-gradient(to right, #243B55, #141E30);
-      /* Chrome 10-25, Safari 5.1-6 */
-      background: linear-gradient(to right, #243B55, #141E30);
-      /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-      left: 97.5vw;
-      z-index: 2;
-      position: absolute;
+    .screen {
+      display: grid;
+      grid-template-columns: auto 0px;
+      grid-template-rows: 100vh;
+      grid-template-areas: "viewer hud";
+    }
+
+    .canvas {
+      grid-area: viewer;
+      width: 100%;
+      height: 100%;
+    }
+
+    .hud {
+      grid-area: hud;
+      width: 100%;
+      height: 100%;
+      display: flex;
       text-align: center;
-      color: white;
-      transition: 1s;
-      display: flex;
       flex-direction: column;
-    }
-
-    .cabecalho {
-      display: flex;
-      height: 57px;
-      align-content: center;
-      justify-content: center;
-      padding: 0px 20px 0px 20px;
-    }
-
-    .back {
-      position: absolute;
-      cursor: pointer;
-      display: flex;
-      justify-items: center;
-      align-items: center;
-      height: 57px;
-      left: 10px;
       color: white;
-    }
-
-    .corpo {
-      width: 15vw;
-      height: 95vw;
-      display: flex;
-      display: flex;
-      justify-content: center;
-    }
-
-    .corpo button {
-      width: 150px;
-      height: 20px;
-    }
-
-    .full-screen {
-      position: absolute;
-      bottom: 0px;
-      left: 0px;
-      right: 0px;
-      top: 0px;
+      background: #141E30;
+      background: -webkit-linear-gradient(to right, #243B55, #141E30);
+      background: linear-gradient(to right, #243B55, #141E30);
     }
   </style>
 </head>
 
 <body>
-  <script src="./js/three.min.js"></script>
-  <script src="./js/OrbitControls.js"></script>
-  <script src="https://threejs.org/examples/js/loaders/GLTFLoader.js"></script>
-  <div id="hud" class="testando">
-    <div class="cabecalho">
-      <div id="back" class="back">
-        <img src="./js/bx-menu.svg" alt="">
-      </div>
-      <p>HUDZINHA v0.1</p>
+  <screen class="screen">
+    <div id="canvas" class="canvas">
+
     </div>
-    <div class="corpo">
-      <button onclick="addCar()">Add Car</button>
+    <div id="hud" class="hud">
+
     </div>
-  </div>
+  </screen>
 
-  <div id="webglviewer" class="full-screen"></div>
-
-  <script>
-    let back = document.getElementById('back');
-    let hud = document.getElementById('hud');
-    let hudToggled = false;
-    back.onclick = () => {
-      if (hudToggled) {
-        hud.style['left'] = '97.5vw';
-        hudToggled = !hudToggled
-      } else {
-        hud.style['left'] = '85vw';
-        hudToggled = !hudToggled
-      }
-    }
-
-
-  </script>
-  <script src="main.js"></script>
-  <script>
-    // Call the animate function
-    animate();
-
-    // The animated function updates the scene
-    // and updates the controls
-    function animate() {
-
-      // The window.requestAnimationFrame() method tells the browser that you wish to perform an animation and requests that the browser calls a specified function to update an animation before the next repaint. (docs)
-      requestAnimationFrame(animate);
-
-      // Update the controls
-      controls.update();
-
-      controls.rotateSpeed = -0.2;
-
-      controls.enableDamping = true;
-      // Render the scene
-      renderer.render(scene, camera);
-
-    }
+  <script type="module">
+    import Main from "./main.js"
+    global.main = new Main()
+    global.main.load()
   </script>
 </body>
 

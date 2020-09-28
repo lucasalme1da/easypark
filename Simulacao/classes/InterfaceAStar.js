@@ -1,5 +1,5 @@
 import ManipuladorInput from './ManipuladorInput.js'
-const { Raycaster,LineBasicMaterial,SphereGeometry,MeshBasicMaterial,Mesh } = require('three')
+const { Raycaster,LineBasicMaterial,Line,BufferGeometry,SphereGeometry,MeshBasicMaterial,Mesh, Vector2 } = require('three')
 export default class InterfaceAStar {
     
     constructor({nomeAtributoPosicao,nomeAtributoConexoes,funcaoConectarNos,funcaoAdicionaNos,nos,camera, cena, base}){
@@ -28,6 +28,8 @@ export default class InterfaceAStar {
         //Deve retornar um no
         this.funcaoAdicionaNos = funcaoAdicionaNos
         this.funcaoConectarNos = funcaoConectarNos
+        this.nomeAtributoConexoes = nomeAtributoConexoes
+        this.nomeAtributoPosicao = nomeAtributoPosicao
         this.linhas = []
         this.nos.forEach(no => {
             this.criarMesh(no)
@@ -71,11 +73,11 @@ export default class InterfaceAStar {
     criarMesh(no){
         const geometriaEsfera= new SphereGeometry(1, 12, 12)
         const materialEsfera = new MeshBasicMaterial({ color: 0x33ff99 })
-        mesh = new Mesh(geometriaEsfera, materialEsfera)
+        const mesh = new Mesh(geometriaEsfera, materialEsfera)
         mesh.dono = no
         no.mesh = mesh 
         this.cena.add(mesh)
-        mesh.position.copy(no[nomeAtributoPosicao])
+        mesh.position.copy(no[this.nomeAtributoPosicao])
         mesh.visible = this.visibilidade
     }
     trocarModo(){
@@ -109,7 +111,7 @@ export default class InterfaceAStar {
         this.raycaster.setFromCamera( this.mouse, this.camera )
         const data = this.raycaster.intersectObject(this.base)
         const ponto = data[0].point.toArray()
-        const no = funcaoAdicionaNos([ponto[0],0,ponto[2]])
+        const no = this.funcaoAdicionaNos([ponto[0],0,ponto[2]])
         this.criarMesh(no)
         console.log(`Nó adicionado em (${ponto[0]},0,${ponto[2]})`)
     }
@@ -123,16 +125,15 @@ export default class InterfaceAStar {
             return
         }
         const objeto = data[0].object
-
         if(this.nosParaConectar.length == 0){
-            this.nosParaConectar.push(objeto.owner)
-            objeto.material.color.setHex( 0xff0000 )
-            console.log('Primeiro nó ',object.owner, '. Selecione o segundo...')
+            this.nosParaConectar.push(objeto.dono)
+            objeto.material.color.setHex( 0xfff000 )
+            console.log('Primeiro nó ',objeto.dono, '. Selecione o segundo...')
         }
         else if(this.nosParaConectar.length == 1){
-            this.nosParaConectar.push(objeto.owner)
+            this.nosParaConectar.push(objeto.dono)
             objeto.material.color.setHex( 0xfff000 )
-            console.log('Segundo nó ',object.owner,'. Precione C para conectar os nós selecionados ou clique em qualquer lugar para cancelar.')
+            console.log('Segundo nó ',objeto.dono,'. Precione C para conectar os nós selecionados ou clique em qualquer lugar para cancelar.')
         }else{
             this.nosParaConectar.forEach(no => no.mesh.material.color.setHex(0x33ff99))
             this.nosParaConectar = []
@@ -145,17 +146,17 @@ export default class InterfaceAStar {
             return
         }
         const [ primeiroNo,segundoNo ]= this.nosParaConectar
-        funcaoConectarNos(primeiroNo,segundoNo)
+        this.funcaoConectarNos(primeiroNo,segundoNo)
         this.nosParaConectar.forEach(no => no.mesh.material.color.setHex(0x33ff99))
         this.nosParaConectar = []
-        this.desenharLinha(primeiroNo[nomeAtributoPosicao],segundoNo[nomeAtributoPosicao],this.cena)
+        this.desenharLinha(primeiroNo[this.nomeAtributoPosicao],segundoNo[this.nomeAtributoPosicao],this.cena)
         console.log('Nós conectados ', primeiroNo, segundoNo)
     }
     iniciarLinhas(){
         this.nos.forEach(no => {
             let linha
-            no[nomeAtributoConexoes].forEach(noConectado => {
-                linha = this.desenharLinha(no[nomeAtributoPosicao].clone(),noConectado[nomeAtributoPosicao].clone(),this.cena)
+            no[this.nomeAtributoConexoes].forEach(noConectado => {
+                linha = this.desenharLinha(no[this.nomeAtributoPosicao].clone(),noConectado[this.nomeAtributoPosicao].clone(),this.cena)
             })
         })
     }

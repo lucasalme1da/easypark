@@ -1,4 +1,5 @@
-class BuscaRota{
+
+export default class BuscaRota{
 
   constructor(noInicial){
     this.noInicial = noInicial

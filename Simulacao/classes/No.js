@@ -1,11 +1,11 @@
-const { Vector3 } = require("three")
+const { Vector3, PositionalAudio } = require("three")
 
-class No{
+export default class No{
 
-  constructor(...posicao, vizinhos){
+  constructor(posicao, vizinhos){
     this.posicao = new Vector3(...posicao)
     this.vizinhos = []
-    if(typeof vizinhos.isArray != 'undefined'){
+    if(vizinhos !== undefined){
       vizinhos.forEach(no => this.conectarNos(no))
     }
   }
@@ -24,7 +24,6 @@ class No{
         distanciaEntreNos
       })
     }
-    
     if(!no.vizinhos.find(vizinho => vizinho.no === this)){
       no.vizinhos.push({
         no: this,

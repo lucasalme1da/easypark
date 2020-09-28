@@ -12,7 +12,7 @@ process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true';
 app.on('ready', () => {
   mainWindow = new BrowserWindow({
     webPreferences: {
-      nodeIntegration: false
+      nodeIntegration: true
     }
   });
   mainWindow.loadURL(`file://${__dirname}/index.html`);
