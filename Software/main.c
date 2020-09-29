@@ -5,12 +5,37 @@ int main(void) {
   Destino *destinos = le_destino();
 
   Vaga *vagas = le_vagas();
+  
+  // Vaga *tags = aloca_vetor_tags()
 
-  Destino destino = le_input(destinos, conta_linhas_destinos());
+  while(1){
 
-  Vaga *ranking_de_vagas = calcula_vaga(destino, vagas);
+    char *comando = aguardar_comando(); 
+    char fluxo = comando[0]
+    if(fluxo == "A"){
 
-  Vaga vaga_disponivel = verifica_vaga(ranking_de_vagas);
+      Destino destino = le_input(destinos, conta_linhas_destinos());
 
-  exibe_info(vaga_disponivel);
+      Vaga *ranking_de_vagas = calcula_vaga(destino, vagas);
+
+      Vaga vaga_disponivel = verifica_vaga(ranking_de_vagas);
+
+      //atribuir_tag(vaga_disponivel); 
+
+      exibe_info(vaga_disponivel);
+
+    }
+    else if(fluxo == "B"){
+      //B a02 carro02
+      //confirma_vaga(comando);
+    }
+    else if(fluxo == "C"){
+      //C a02
+      //desaloca_vaga(comando);
+
+    }
+
+  }
+
+
 }
