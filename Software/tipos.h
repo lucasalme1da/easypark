@@ -26,4 +26,8 @@ typedef struct {
   Ponto ponto;
 } Destino;
 
+typedef struct {
+  char id_veiculo[10];
+} Tag;
+
 #endif  // TIPOS_H_

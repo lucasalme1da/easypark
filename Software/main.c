@@ -6,12 +6,12 @@ int main(void) {
 
   Vaga *vagas = le_vagas();
   
-  // Vaga *tags = aloca_vetor_tags()
+  Tag *tags = aloca_vetor_tags(conta_linhas_vagas()); 
 
   while(1){
 
     char *comando = aguardar_comando(); 
-    char fluxo = comando[0]
+    char fluxo = comando[0];
     if(fluxo == "A"){
 
       Destino destino = le_input(destinos, conta_linhas_destinos());
@@ -20,7 +20,7 @@ int main(void) {
 
       Vaga vaga_disponivel = verifica_vaga(ranking_de_vagas);
 
-      //atribuir_tag(vaga_disponivel); 
+      atribuir_vaga(vaga_disponivel, tags); 
 
       exibe_info(vaga_disponivel);
 
