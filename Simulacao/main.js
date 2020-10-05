@@ -2,6 +2,7 @@ require('./classes/OrbitControls.js')
 import Modelo from './classes/Modelo.js'
 import BuscaRota from './classes/BuscaRota.js'
 import InterfaceAStar from './classes/InterfaceAStar.js'
+
 import No from './classes/No.js'
 const {
   WebGLRenderer,
@@ -46,27 +47,18 @@ export default class main {
 
     this.modelo.carregarEstacionamento()
 
-    this.modelo.carregarPlano().then((plano) => {
-      this.nos = []
+    const plano = await this.modelo.carregarPlano()
 
-      this.interface = new InterfaceAStar({
-        nomeAtributoPosicao: 'posicao',
-        nomeAtributoConexoes: 'vizinhos',
-        funcaoConectarNos: (primeiroNo, segundoNo) => {
-          primeiroNo.conectarNos(segundoNo)
-        },
-        funcaoAdicionaNos: (posicao) => {
-          const no = new No(posicao)
-          this.nos.push(no)
-          return no
-        },
-        nos: this.nos,
-        camera: this.camera,
-        cena: this.scene,
-        base: plano,
-        canvas: this.canvas
-      })
+    
+    this.interface = new InterfaceAStar({
+      nomeAtributoPosicao: 'posicao',
+      nomeAtributoConexoes: 'vizinhos',
+      camera: this.camera,
+      cena: this.scene,
+      base: plano,
+      canvas: this.canvas
     })
+
 
     this.animate()
   }
