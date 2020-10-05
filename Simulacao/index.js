@@ -2,7 +2,8 @@ const electron = require('electron');
 const path = require('path');
 
 require('electron-reload')(__dirname, {
-  electron: path.join(__dirname, 'node_modules', '.bin', 'electron')
+  electron: path.join(__dirname, 'node_modules', '.bin', 'electron'),
+  ignored: /data|[\/\\]\./
 });
 const url = require('url');
 
