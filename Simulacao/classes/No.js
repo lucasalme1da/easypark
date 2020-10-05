@@ -1,4 +1,4 @@
-const { Vector3, PositionalAudio } = require("three")
+const { Vector3 } = require("three")
 
 export default class No{
 

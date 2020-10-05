@@ -3,6 +3,7 @@ import Modelo from './classes/Modelo.js'
 import BuscaRota from './classes/BuscaRota.js'
 import InterfaceAStar from './classes/InterfaceAStar.js'
 import GravacaoCoordenadas from './classes/GravacaoCoordenadas.js'
+
 import No from './classes/No.js'
 const {
   WebGLRenderer,
@@ -54,33 +55,22 @@ export default class main {
 
     this.modelo.carregarEstacionamento()
 
-    this.modelo.carregarPlano().then((plano) => {
-      this.nos = []
+    const plano = await this.modelo.carregarPlano()
 
-      this.interface = new InterfaceAStar({
-        nomeAtributoPosicao: 'posicao',
-        nomeAtributoConexoes: 'vizinhos',
-        funcaoConectarNos: (primeiroNo, segundoNo) => {
-          primeiroNo.conectarNos(segundoNo)
-        },
-        funcaoAdicionaNos: (posicao) => {
-          const no = new No(posicao)
-          this.nos.push(no)
-          return no
-        },
-        nos: this.nos,
-        camera: this.camera,
-        cena: this.scene,
-        base: plano,
-        canvas: this.canvas
-      })
-
-      this.gravacao = new GravacaoCoordenadas(this.interface.nos)
-
+    this.interface = new InterfaceAStar({
+      nomeAtributoPosicao: 'posicao',
+      nomeAtributoConexoes: 'vizinhos',
+      camera: this.camera,
+      cena: this.scene,
+      base: plano,
+      canvas: this.canvas
     })
-
+     
+    this.gravacao = new GravacaoCoordenadas(this.interface.nos)
+    
     this.animate()
   }
+  
   animate() {
     this.stats.begin()
     this.renderer.render(this.scene, this.camera)
@@ -90,9 +80,6 @@ export default class main {
 
     requestAnimationFrame(this.animate.bind(this))
     this.stats.end()
-
-
-
   }
 
 }
