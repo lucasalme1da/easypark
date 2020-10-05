@@ -50,7 +50,7 @@ export default class main {
 
     this.modelo.carregarListaDeCarros()
 
-    this.modelo.carregarCeu('sky_photo6')
+    this.modelo.carregarCeu()
 
     this.modelo.carregarEstacionamento()
 

@@ -21,9 +21,9 @@ export default class Modelo {
     this.scene = scene
   }
 
-  carregarCeu(sky) {
+  carregarCeu() {
     this.texture.load(
-      `textures/skies/${sky}.jpg`,
+      `textures/sky.jpg`,
       (texture) => {
         var material = new MeshBasicMaterial({
           map: texture
