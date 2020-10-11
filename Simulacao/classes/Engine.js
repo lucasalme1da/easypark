@@ -11,10 +11,10 @@ export default class Engine {
         this.noInicial = new No([0, 0, 0])
         this.buscaRota = new BuscaRota(this.noInicial)
         this.frente = new Vector3(0, 0, 1)
-        this.velocidadeDoCarro = 10
+        this.velocidadeDoCarro = 3
         this.tempoDeRotacao = 500
         this.toleranciaAngulo = 5
-        this.tolerancia = new Vector3(0.8, 0, 0.8)
+        this.tolerancia = new Vector3(0.3, 0.3, 0.3)
     }
     add(objeto) {
         if (!objeto.position) {
@@ -52,22 +52,12 @@ export default class Engine {
                 .clone()
                 .sub(previousNode.posicao)
                 .normalize()
-                .multiplyScalar(this.velocidadeDoCarro)
+
             let angle = this.frente.angleTo(direction.clone().normalize())
             angle = targetNode.posicao.x > previousNode.posicao.x ? angle : -angle
             const degAngle = MathUtils.radToDeg(angle)
-            if (!(degAngle <= this.previousAngle + this.toleranciaAngulo && degAngle >= this.previousAngle - this.toleranciaAngulo)) {
-                await this.rotacionarModelo3D(
-                    modelo3D,
-                    {
-                        x: -90,
-                        z: degAngle,
-                    },
-                    this.tempoDeRotacao
-                )
-            }
-            await this.goToNode(previousNode, targetNode, direction, modelo3D, degAngle)
-            this.previousAngle = degAngle
+            await this.rotacionarModelo3D(modelo3D, { x: -90, z: degAngle, y: 0 })
+            await this.goToNode(previousNode, targetNode, direction, modelo3D)
         }
         modelo3D.noInicial = rota[rota.length - 1]
     }
@@ -87,7 +77,11 @@ export default class Engine {
                         resolve()
                         return
                     }
-                    modelo3D.velocidade = direction.clone().setY(modelo3D.velocidade.y)
+                    modelo3D.velocidade = direction
+                        .clone()
+                        .normalize()
+                        .setY(modelo3D.velocidade.y)
+                        .multiplyScalar(this.velocidadeDoCarro)
                 }).bind(this),
                 16
             )

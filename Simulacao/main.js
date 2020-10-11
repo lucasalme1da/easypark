@@ -4,18 +4,9 @@ import BuscaRota from "./classes/BuscaRota.js"
 import InterfaceAStar from "./classes/InterfaceAStar.js"
 import GravacaoCoordenadas from "./classes/GravacaoCoordenadas.js"
 import Engine from "./classes/Engine.js"
-
+import GerenciadorVagas from "./classes/GerenciadorVagas.js"
 import No from "./classes/No.js"
-const {
-    WebGLRenderer,
-    Vector3,
-    OrbitControls,
-    Scene,
-    PerspectiveCamera,
-    AmbientLight,
-    SpotLight,
-    Clock,
-} = require("three")
+const { WebGLRenderer, Vector3, OrbitControls, Scene, PerspectiveCamera, AmbientLight, SpotLight, Clock } = require("three")
 
 const Stats = require("stats.js")
 
@@ -35,12 +26,7 @@ export default class main {
         this.modelo = new Modelo(this.scene)
         this.clock = new Clock()
         this.engine = new Engine()
-        this.camera = new PerspectiveCamera(
-            80,
-            this.canvas.clientWidth / this.canvas.clientHeight,
-            1,
-            10000000
-        ) // fov, aspect, near, far
+        this.camera = new PerspectiveCamera(80, this.canvas.clientWidth / this.canvas.clientHeight, 1, 10000000) // fov, aspect, near, far
         this.camera.position.set(0, 5, 5)
         this.camera.lookAt(0, 0, 0)
 
@@ -63,7 +49,6 @@ export default class main {
         this.modelo.carregarEstacionamento()
 
         const plano = await this.modelo.carregarPlano()
-
         this.interface = new InterfaceAStar({
             nomeAtributoPosicao: "posicao",
             nomeAtributoConexoes: "vizinhos",
@@ -72,28 +57,36 @@ export default class main {
             base: plano,
             canvas: this.canvas,
         })
+        const nos = this.interface.gerenciadorNos.nos
+        this.entradas = [nos[66], nos[73], nos[71]]
+        this.gerenciadorVagas = new GerenciadorVagas({ gerenciadorNos: this.interface.gerenciadorNos })
 
-        this.gravacao = new GravacaoCoordenadas(this.interface.nos)
-        const noInicial = this.interface.nos[4]
-        const noFinal = this.interface.nos[3]
-        const carroTeste = await this.modelo.adicionarCarro(
-            "blue_car",
-            [noInicial.posicao.x, noInicial.posicao.y, noInicial.posicao.z],
-            0
-        )
-        carroTeste.noInicial = noInicial
-        carroTeste.position.copy(noInicial.posicao)
-        this.camera.position.copy(noInicial.posicao)
-        this.engine.add(carroTeste)
-        this.setFrente = (posicao) => {
-            this.engine.frente = new Vector3(...posicao)
-        }
-        this.iniciarRota = (indice) => {
-            let noInterface = this.interface.nos[indice]
-            this.engine.go(carroTeste, noInterface)
-        }
-        this.carro = carroTeste
         this.animate()
+    }
+    async instanciarCarro({ entrada, nomeVaga }) {
+        const noInicial = entrada ? this.entradas : this.entradas[0]
+        const noFinal = this.gerenciadorVagas.vagas.find(vaga => vaga.nome == nomeVaga).no
+        const corCarro = Math.random() * 4 + 1
+        let nomeCor = "blue_car"
+        switch (corCarro) {
+            case 1:
+                nomeCor = "blue_car"
+                break
+            case 2:
+                nomeCor = "carbon_car"
+                break
+            case 3:
+                nomeCor = "dummy_car"
+                break
+            case 4:
+                nomeCor = "red_car"
+                break
+        }
+        const carro = await this.modelo.adicionarCarro(nomeCor, [noInicial.posicao.x, noInicial.posicao.y, noInicial.posicao.z], 0)
+        carro.noInicial = noInicial
+        carro.position.copy(noInicial.posicao)
+        this.engine.add(carro)
+        this.engine.go(carro, noFinal)
     }
 
     animate() {
