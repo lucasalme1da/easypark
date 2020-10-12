@@ -1,3 +1,0 @@
-destino01 47 49 5
-destino02 259 49 6
-destino03 48 250 7
