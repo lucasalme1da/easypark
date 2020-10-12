@@ -29,9 +29,7 @@ export default class main {
         this.camera.position.set(0, 5, 5)
         this.camera.lookAt(0, 0, 0)
 
-        this.engine = new Engine({
-            renderizar: () => this.renderer.render(this.scene, this.camera),
-        })
+        this.engine = new Engine()
         this.controls = new OrbitControls(this.camera, this.renderer.domElement)
         this.controls.enableZoom = true
         this.controls.target.set(0, 0, 0)
@@ -63,6 +61,8 @@ export default class main {
         this.entradas = [nos[66], nos[73], nos[71]]
         this.gerenciadorVagas = new GerenciadorVagas({ gerenciadorNos: this.interface.gerenciadorNos })
         this.contagemCarros = 0
+
+        //Funções de Debug
         this.testarTodasRotas = () => {
             this.gerenciadorVagas.vagas.forEach(vaga => {
                 console.log(vaga.nome)

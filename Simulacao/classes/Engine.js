@@ -2,19 +2,15 @@ const { Vector3, Quaternion, Euler, MathUtils } = require("three")
 import BuscaRota from "./BuscaRota.js"
 import No from "./No.js"
 export default class Engine {
-    constructor({ renderizar }) {
+    constructor() {
         //Objetos que terao movimento
         //
-        this.renderizar = renderizar
         this.objetos = []
         this.estacionario = new Vector3(0, 0, 0)
         //Resistencia a velocidade
         this.resistencia = 0.01
-        this.noInicial = new No([0, 0, 0])
-        this.buscaRota = new BuscaRota(this.noInicial)
         this.frente = new Vector3(0, 0, 1)
         this.velocidadeDoCarro = 10
-        this.toleranciaAngulo = 5
         this.tolerancia = 0.2
     }
     add(objeto) {
@@ -44,10 +40,8 @@ export default class Engine {
             throw new Error('Modelo3D deve ter um parametro "noInicial" do tipo No')
             return
         }
-        console.log("Rota iniciada")
-        const buscaRota = new BuscaRota(modelo3D.noInicial, this.renderizar)
+        const buscaRota = new BuscaRota(modelo3D.noInicial)
         const rota = buscaRota.irProximoNo(noFinal)
-        console.log("Rota Calculada: ", rota)
         for (let index = 1; index < rota.length; index++) {
             const previousNode = rota[index - 1]
             const targetNode = rota[index]
@@ -74,16 +68,11 @@ export default class Engine {
             const distanciaInicial = previousNode.posicao.distanceTo(targetNode.posicao)
             let distanciaAntes = distanciaInicial
             let percorrido = 0
-            let frear = false
-
             const interval = setInterval(
                 (() => {
                     let distanciaAtual = modelo3D.position.distanceTo(targetNode.posicao)
                     percorrido += Math.abs(distanciaAntes - distanciaAtual)
 
-                    //  if (percorrido >= distanciaInicial - distanciaInicial / 5) {
-                    //      frear = true
-                    //  }
                     if (percorrido >= distanciaInicial - this.tolerancia) {
                         modelo3D.velocidade.copy(this.estacionario)
                         modelo3D.position.copy(targetNode.posicao)
@@ -95,7 +84,7 @@ export default class Engine {
                         .clone()
                         .normalize()
                         .setY(modelo3D.velocidade.y)
-                        .multiplyScalar(frear ? this.velocidadeDoCarro * (distanciaAtual / distanciaInicial) * 3 : this.velocidadeDoCarro)
+                        .multiplyScalar(this.velocidadeDoCarro)
                     distanciaAntes = distanciaAtual
                 }).bind(this),
                 16
