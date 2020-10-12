@@ -25,11 +25,13 @@ export default class main {
         this.scene = new Scene()
         this.modelo = new Modelo(this.scene)
         this.clock = new Clock()
-        this.engine = new Engine()
         this.camera = new PerspectiveCamera(80, this.canvas.clientWidth / this.canvas.clientHeight, 1, 10000000) // fov, aspect, near, far
         this.camera.position.set(0, 5, 5)
         this.camera.lookAt(0, 0, 0)
 
+        this.engine = new Engine({
+            renderizar: () => this.renderer.render(this.scene, this.camera),
+        })
         this.controls = new OrbitControls(this.camera, this.renderer.domElement)
         this.controls.enableZoom = true
         this.controls.target.set(0, 0, 0)
@@ -60,25 +62,42 @@ export default class main {
         const nos = this.interface.gerenciadorNos.nos
         this.entradas = [nos[66], nos[73], nos[71]]
         this.gerenciadorVagas = new GerenciadorVagas({ gerenciadorNos: this.interface.gerenciadorNos })
+        this.contagemCarros = 0
+        this.testarTodasRotas = () => {
+            this.gerenciadorVagas.vagas.forEach(vaga => {
+                console.log(vaga.nome)
+                this.instanciarCarro({ entrada: 0, nomeVaga: vaga.nome })
+            })
+        }
+        this.gerarCarro = async () => {
+            const vagaAleatoria = Math.floor(Math.random() * 66)
+            const entradaAleatoria = Math.floor(Math.random() * 2)
+            console.log("Vaga: ", this.gerenciadorVagas.vagas[vagaAleatoria].nome, "Entrada: ", entradaAleatoria)
+            await this.instanciarCarro({ entrada: entradaAleatoria, nomeVaga: this.gerenciadorVagas.vagas[vagaAleatoria].nome })
+            this.contagemCarros++
+            setTimeout(this.gerarCarro, 5500)
+        }
 
         this.animate()
     }
     async instanciarCarro({ entrada, nomeVaga }) {
-        const noInicial = entrada ? this.entradas : this.entradas[0]
+        console.log("Instanciando Carro")
+        console.log("Numero de carros: ", this.contagemCarros)
+        const noInicial = entrada ? this.entradas[entrada] : this.entradas[0]
         const noFinal = this.gerenciadorVagas.vagas.find(vaga => vaga.nome == nomeVaga).no
-        const corCarro = Math.random() * 4 + 1
+        const corCarro = Math.floor(Math.random() * 4)
         let nomeCor = "blue_car"
         switch (corCarro) {
-            case 1:
+            case 0:
                 nomeCor = "blue_car"
                 break
-            case 2:
+            case 1:
                 nomeCor = "carbon_car"
                 break
-            case 3:
+            case 2:
                 nomeCor = "dummy_car"
                 break
-            case 4:
+            case 3:
                 nomeCor = "red_car"
                 break
         }

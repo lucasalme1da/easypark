@@ -40,4 +40,3 @@ const mainMenuTemplate = [
         },
     },
 ]
-

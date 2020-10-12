@@ -36,9 +36,9 @@ export default class GerenciadorNos {
     salvaNos() {
         const dadosArquivoJson = this.nos.map(no => {
             const vizinhos = no.vizinhos.map(vizinho => {
-                const { distanciaEntreNos } = vizinho
+                const { distancia } = vizinho
                 const noIndex = this.nos.findIndex(noRef => noRef == vizinho.no)
-                return { no: noIndex, distanciaEntreNos }
+                return { no: noIndex, distancia }
             })
             const ob = {
                 posicao: no.posicao.toArray(),
@@ -61,10 +61,10 @@ export default class GerenciadorNos {
             })
             this.nos.forEach((no, index) => {
                 no.vizinhos = dadosArquivoJson[index].vizinhos.map(vizinho => {
-                    const { distanciaEntreNos } = vizinho
+                    const { distancia } = vizinho
                     return {
                         no: this.nos[vizinho.no],
-                        distanciaEntreNos,
+                        distancia,
                     }
                 })
             })

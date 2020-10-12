@@ -2,8 +2,10 @@ const { Vector3, Quaternion, Euler, MathUtils } = require("three")
 import BuscaRota from "./BuscaRota.js"
 import No from "./No.js"
 export default class Engine {
-    constructor() {
+    constructor({ renderizar }) {
         //Objetos que terao movimento
+        //
+        this.renderizar = renderizar
         this.objetos = []
         this.estacionario = new Vector3(0, 0, 0)
         //Resistencia a velocidade
@@ -11,10 +13,9 @@ export default class Engine {
         this.noInicial = new No([0, 0, 0])
         this.buscaRota = new BuscaRota(this.noInicial)
         this.frente = new Vector3(0, 0, 1)
-        this.velocidadeDoCarro = 3
-        this.tempoDeRotacao = 500
+        this.velocidadeDoCarro = 10
         this.toleranciaAngulo = 5
-        this.tolerancia = new Vector3(0.3, 0.3, 0.3)
+        this.tolerancia = 0.2
     }
     add(objeto) {
         if (!objeto.position) {
@@ -43,8 +44,10 @@ export default class Engine {
             throw new Error('Modelo3D deve ter um parametro "noInicial" do tipo No')
             return
         }
-        this.buscaRota.noInicial = modelo3D.noInicial
-        const rota = this.buscaRota.irProximoNo(noFinal)
+        console.log("Rota iniciada")
+        const buscaRota = new BuscaRota(modelo3D.noInicial, this.renderizar)
+        const rota = buscaRota.irProximoNo(noFinal)
+        console.log("Rota Calculada: ", rota)
         for (let index = 1; index < rota.length; index++) {
             const previousNode = rota[index - 1]
             const targetNode = rota[index]
@@ -60,6 +63,7 @@ export default class Engine {
             await this.goToNode(previousNode, targetNode, direction, modelo3D)
         }
         modelo3D.noInicial = rota[rota.length - 1]
+        modelo3D.velocidade = this.estacionario.clone()
     }
     isBetween(vector, targetVectorMin, targetVectorMax) {
         const compareAxis = axis => vector[axis] >= targetVectorMin[axis] && vector[axis] <= targetVectorMax[axis]
@@ -67,12 +71,22 @@ export default class Engine {
     }
     goToNode(previousNode, targetNode, direction, modelo3D) {
         return new Promise(resolve => {
-            const min = targetNode.posicao.clone().sub(this.tolerancia)
-            const max = targetNode.posicao.clone().add(this.tolerancia)
+            const distanciaInicial = previousNode.posicao.distanceTo(targetNode.posicao)
+            let distanciaAntes = distanciaInicial
+            let percorrido = 0
+            let frear = false
+
             const interval = setInterval(
                 (() => {
-                    if (this.isBetween(modelo3D.position, min, max)) {
-                        modelo3D.velocidade = this.estacionario.clone()
+                    let distanciaAtual = modelo3D.position.distanceTo(targetNode.posicao)
+                    percorrido += Math.abs(distanciaAntes - distanciaAtual)
+
+                    //  if (percorrido >= distanciaInicial - distanciaInicial / 5) {
+                    //      frear = true
+                    //  }
+                    if (percorrido >= distanciaInicial - this.tolerancia) {
+                        modelo3D.velocidade.copy(this.estacionario)
+                        modelo3D.position.copy(targetNode.posicao)
                         clearInterval(interval)
                         resolve()
                         return
@@ -81,7 +95,8 @@ export default class Engine {
                         .clone()
                         .normalize()
                         .setY(modelo3D.velocidade.y)
-                        .multiplyScalar(this.velocidadeDoCarro)
+                        .multiplyScalar(frear ? this.velocidadeDoCarro * (distanciaAtual / distanciaInicial) * 3 : this.velocidadeDoCarro)
+                    distanciaAntes = distanciaAtual
                 }).bind(this),
                 16
             )
