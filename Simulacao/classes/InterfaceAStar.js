@@ -1,8 +1,9 @@
 import ManipuladorInput from './ManipuladorInput.js'
+import GerenciadorNos from './GerenciadorNos.js'
 const { Raycaster, LineBasicMaterial, Line, BufferGeometry, SphereGeometry, MeshBasicMaterial, Mesh, Vector2 } = require('three')
 export default class InterfaceAStar {
 
-  constructor({ nomeAtributoPosicao, nomeAtributoConexoes, funcaoConectarNos, funcaoAdicionaNos, nos, camera, cena, base, canvas }) {
+  constructor({ nomeAtributoPosicao, nomeAtributoConexoes, funcaoConectarNos, funcaoRemoveNos, funcaoAdicionaNos, nos, camera, cena, base, canvas }) {
     // Arquitetura esperada recebida dos parametros do construtor:
     //  funcaoAdicionaNos([,,,]) Nó
     //  funcaoConectarNos(Nó,Nó) void
@@ -11,24 +12,29 @@ export default class InterfaceAStar {
     //  nos [Nó,Nó,...] todos os nós 
     //  camera instancia de Camera do threejs
     //  cena instance de Scene do threejs
-    if (typeof funcaoAdicionaNos != 'function' || typeof funcaoConectarNos != 'function')
-      throw new Error('funcaoAdicionaNos e funcaoConectarNos devem ser funções')
+
     if (typeof nomeAtributoPosicao != 'string' || typeof nomeAtributoConexoes != 'string')
       throw new Error('nomeAtributoPosicao e nomeAtributoConexoes devem ser strings')
-    if (!(nos && camera && cena))
-      throw new Error('Faltando o atributo nos, camera ou cena')
+    if (!(camera && cena))
+      throw new Error('Faltando o camera ou cena')
     if (!base) {
       throw new Error('Nenhum objeto base fornecido')
     }
+
+    this.gerenciadorNos = new GerenciadorNos()
+    this.funcaoConectarNos = this.gerenciadorNos.conectaNo
+    this.funcaoAdicionaNos = this.gerenciadorNos.adicionaNo
+    this.funcaoRemoveNos = this.gerenciadorNos.removeNo
+    this.funcaoSalvaNos = this.gerenciadorNos.salvaNos
+    this.nos = this.gerenciadorNos.nos
+
     this.camera = camera
     this.cena = cena
-    this.nos = nos
     //Base é objeto que servirá como um chão para o raycaster
     this.base = base
     this.canvas = canvas
     //Deve retornar um no
-    this.funcaoAdicionaNos = funcaoAdicionaNos
-    this.funcaoConectarNos = funcaoConectarNos
+
     this.nomeAtributoConexoes = nomeAtributoConexoes
     this.nomeAtributoPosicao = nomeAtributoPosicao
     this.linhas = []
@@ -44,6 +50,7 @@ export default class InterfaceAStar {
     this.input.KeyN = () => this.trocarModo()
     this.input.KeyM = () => this.comutarVisibilidade()
     this.input.KeyC = () => this.conectarNosSelecionados()
+    this.input.KeyS = () => this.funcaoSalvaNos()
     // 0 - Adicionar Nó
     // 1 - Conectar Nós
     // 2 - info Nó
@@ -55,11 +62,14 @@ export default class InterfaceAStar {
             Modo 0: Adicionar Nó na posição do mouse ao clicar.
             Modo 1: Selecionar nós com o clique.
             Modo 2: Exibir informações do nó alvo do clique.
+            Modo 3: O MODO MAIS PERIGOSO. Deleta um nó.
         
         Pressione M para trocar a visibilidade dos nós e conexões, por default eles não estão visíveis
 
         Pressione C para conectar nós previamente selecionados, se o número de nós selecionados for 2 
         eles serão conectados.
+
+        Pressione S para salvas os nós.
         `)
   }
   comutarVisibilidade() {
@@ -83,7 +93,7 @@ export default class InterfaceAStar {
   }
   trocarModo() {
     this.modo++
-    if (this.modo > 2)
+    if (this.modo > 3)
       this.modo = 0
     console.log(`Modo: ${this.modo}`)
   }
@@ -99,6 +109,8 @@ export default class InterfaceAStar {
       case 1:
         this.conectarNos()
         break
+      case 3:
+        this.removerNo()
       default:
         this.raycaster.setFromCamera(this.mouse, this.camera);
         const noMeshes = this.nos.map(no => no.mesh)
@@ -107,6 +119,23 @@ export default class InterfaceAStar {
           console.log(`Nó: `, data[0].object.dono)
 
     }
+  }
+  removerNo(){
+    this.raycaster.setFromCamera(this.mouse, this.camera)
+    const data = this.raycaster.intersectObjects(this.nos.map(no => no.mesh))
+    if (data.length == 0) {
+      console.log('Nenhum nó encontrado')
+      return
+    }
+    const objeto = data[0].object
+    //Remove no Gerenciador Nos
+    this.funcaoRemoveNos(objeto.dono)
+    //Remove na cena
+    this.cena.remove(objeto)
+    //Redesenhar linhas
+    this.linhas.forEach(linha => this.cena.remove(linha))
+    this.linhas = []
+    this.iniciarLinhas()
   }
   adicionarNovoNo() {
     this.raycaster.setFromCamera(this.mouse, this.camera)
@@ -156,7 +185,7 @@ export default class InterfaceAStar {
   iniciarLinhas() {
     this.nos.forEach(no => {
       let linha
-      no[this.nomeAtributoConexoes].forEach(noConectado => {
+      no[this.nomeAtributoConexoes].map(noDistancia => noDistancia.no).forEach(noConectado => {
         linha = this.desenharLinha(no[this.nomeAtributoPosicao].clone(), noConectado[this.nomeAtributoPosicao].clone(), this.cena)
       })
     })
