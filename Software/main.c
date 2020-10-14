@@ -2,8 +2,6 @@
 
 #include "string.h"
 int main(void) {
-  char *p1;
-
   Destino *destinos = le_destino();
 
   Vaga *vagas = le_vagas();
@@ -12,8 +10,9 @@ int main(void) {
 
   while (1) {
     char *comando = mandar_comando("Fala a placa");
-    char placeholder[200];
-    strcpy(placeholder, comando);
+
+    char comandoInicial[200];
+    strcpy(comandoInicial, comando);
 
     char fluxo = comando[0];
 
@@ -25,7 +24,7 @@ int main(void) {
       Vaga vaga_disponivel = verifica_vaga(ranking_de_vagas);
 
       if (strcmp(vaga_disponivel.nome, "Nao ha vagas") != 0) {
-        atribuir_vaga(placeholder, vaga_disponivel, tags);
+        atribuir_vaga(comandoInicial, vaga_disponivel, tags);
       }
 
       exibe_info(vaga_disponivel);
