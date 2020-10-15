@@ -1,15 +1,17 @@
-* {
-  font-family: 'Poppins', sans-serif;
-}
-
 body {
   margin: 0px;
   overflow: hidden;
 }
 
+details {
+  cursor: pointer;
+  font-family: 'Poppins', sans-serif;
+
+}
+
 .screen {
   display: grid;
-  grid-template-columns: auto 400px;
+  grid-template-columns: auto 350px;
   grid-template-rows: 100vh;
   grid-template-areas: "viewer hud";
 }
@@ -28,22 +30,13 @@ body {
   text-align: center;
   flex-direction: column;
   color: white;
-  background: #141E30;
-  background: -webkit-linear-gradient(to right, #243B55, #141E30);
   background: linear-gradient(to right, #243B55, #141E30);
-}
-
-.cabecalho {
-  display: flex;
-  height: 57px;
-  align-content: center;
-  justify-content: center;
-  padding: 0px 20px 0px 20px;
 }
 
 .corpo {
   width: 100%;
   height: 100%;
+  font-size: 14px;
 }
 
 .corpo form {
@@ -55,20 +48,224 @@ body {
 
 .corpo form input {
 
-  width: 50px;
-  height: 30px;
+  width: 40px;
+  height: 20px;
   margin-top: 10px;
 }
 
 .corpo button {
-  width: 150px;
+  width: 100px;
   height: 30px;
   margin-top: 10px;
   border-radius: 0;
   border: none;
   cursor: pointer;
+  font-size: 12px;
+
 }
 
 select {
   padding: 6px;
 }
+
+.display {
+  width: 300px;
+  height: 500px;
+  background-color: #525baa;
+  margin: 25px;
+  box-shadow: inset 4px 4px 4px rgba(0,0,0,0.7), inset -4px -4px 4px rgba(0,0,0,0.7);
+}
+
+.logo {
+  height: 10%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2em;
+  text-transform: uppercase;
+  color: #20213d;
+  font-family: 'IBM Plex Serif', serif;
+  letter-spacing: 10px;
+}
+
+.message {
+  height: 30%;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  font-family: 'Poppins', sans-serif;
+}
+
+.message > p {
+  line-height: 0;
+  font-weight: normal; 
+}
+
+.message > h1 {
+  font-size: 4.5em;
+  line-height: 0;
+}
+
+.message > h2 {
+  font-size: 1em;
+  line-height: 0px;
+  font-weight: normal; 
+}
+
+.message > h3 {
+  font-weight: normal; 
+}
+
+.svg {
+  width: 90px;
+  height: 50px;
+  margin: 0px;
+  text-align: center;
+}
+
+.message > h2:first-child {
+  font-size: 1.5em;
+  line-height: 0px;
+  font-weight: normal; 
+}
+
+
+.show {
+  display: flex;
+}
+
+.button-list {
+  height: 60%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  align-items: center;
+  align-content: center;
+}
+
+.button-list button {
+  margin: 5px 0px;
+  border-radius: 8px;
+  width: 131px;
+  height: 80px;
+  background-color: #20213d;
+  border: 0;
+  color: #fff;
+  font-size: large;
+  cursor: pointer;
+  text-transform: uppercase;
+  box-shadow: 2px 2px 2px rgba(0,0,0,0.7);
+  font-family: 'Poppins', sans-serif;
+}
+
+.button-list button:hover {
+  background-color: #30315a;
+  transition: 0.15s all ease-in;
+}
+
+.button-list button:active {
+  background-color: #3e3f74;
+  box-shadow: none;
+}
+
+
+.button-list button:focus {
+  outline: 0;
+}
+
+/* Bounce loading */
+
+.bounce {
+  text-align: center;
+ }
+ 
+ .bounce>div {
+  width: 12px;
+  height: 12px;
+  background-color: #fff;
+  border-radius: 100%;
+  display: inline-block;
+  animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+ }
+ 
+ .bounce .bounce1 {
+  animation-delay: -0.32s;
+ }
+ 
+ .bounce .bounce2 {
+  animation-delay: -0.16s;
+ }
+ 
+ @keyframes sk-bouncedelay {
+  0% {
+   opacity: 0;
+  }
+  70%,
+  100% {
+   transform: scale(0);
+   opacity: 1;
+  }
+  40% {
+   transform: scale(1.0);
+  }
+ }
+
+ @media only screen and (max-width: 1366px) {
+
+  .screen {
+    grid-template-columns: auto 300px;
+  }
+
+  .corpo {
+    width: 100%;
+    height: 100%;
+    font-size: 12px;
+  }
+    
+  .corpo form input {
+    width: 30px;
+    height: 20px;
+    margin-top: 5px;
+  }
+  
+  .corpo button {
+    width: 80px;
+    height: 30px;
+    margin-top: 10px;
+    font-size: 12px;
+  }
+  
+  select {
+    padding: 6px;
+  }
+  
+  .display {
+    width: 250px;
+    height: 400px;
+    margin: 25px;
+  }
+  
+  .logo {
+    font-size: 1.5em;
+  }
+    
+  .message > h1 {
+    font-size: 4em;
+  }
+  
+  .message > h2 {
+    font-size: 0.9em;
+  }
+  
+  .message > h2:first-child {
+    font-size: 1.5em;
+  }
+  
+  .button-list button {
+    margin: 5px 0px;
+    width: 110px;
+    height: 60px;
+  }
+
+ }

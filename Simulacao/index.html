@@ -4,40 +4,82 @@
 <head>
   <title>Easy Park</title>
   <link rel="stylesheet" href="styles.css">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins&family=IBM+Plex+Serif:wght@600&display=swap"
+    rel="stylesheet">
 </head>
 
 <body>
   <screen class="screen">
     <div id="canvas" class="canvas">
-
     </div>
 
     <div id="hud" class="hud">
-      <div class="cabecalho">
-        <p>HUD v0.2</p>
-      </div>
-      <div class="corpo">
-        <p>Escolha o modelo do carro e suas coordenadas:</p>
-        <form onsubmit="global.main.modelo.addCar(event)">
-          <select id="carListDropdown" name="dropdown">
-          </select>
-          <div>
-            <label for="x">x:</label>
-            <input id="x" type="text">
-            <label for="y" style="margin-left: 10px;">y:</label>
-            <input id="y" type="text">
-            <label for="z" style="margin-left: 10px;">z:</label>
-            <input id="z" type="text">
-            <label for="α" style="margin-left: 10px;">α:</label>
-            <input id="α" type="text">
+
+      <div class="display">
+        <div class="logo">
+          <span>easypark</span>
+        </div>
+
+        <div id="welcome" class="message show">
+          <h2>
+            SEJA BEM VINDO(A)!
+          </h2>
+          <h2>
+            ESCOLHA SEU DESTINO
+          </h2>
+          <h2>
+            ABAIXO:
+          </h2>
+        </div>
+
+        <div id="loading" class="message">
+          <h3>CALCULANDO MELHOR VAGA</h3>
+          <div class="bounce">
+            <div class="bounce1"></div>
+            <div class="bounce2"></div>
+            <div class="bounce3"></div>
           </div>
-          <button onclick="">Adicionar Carro</button>
-        </form>
-        <button type="button" onclick="global.main.gravacao.gravar('destinos', event)">Gravar Destinos</button>
-        <button type="button" onclick="global.main.gravacao.gravar('vagas', event)">Gravar Vagas</button>
-        <button type="button" onclick="global.main.modelo.add66Car(event)">Adicionar 66 Carros</button>
+        </div>
+
+        <div id="result" class="message">
+          <p>SUA VAGA É A</p>
+          <h1>A55</h1>
+        </div>
+
+        <div class="button-list">
+          <button onclick="global.main.display.exibeVaga('A10')">WELLMART</button>
+          <button onclick="global.main.display.exibeVaga('A21')">INFRONT</button>
+          <button onclick="global.main.display.exibeVaga('A32')">ENTRADA PRINCIPAL</button>
+          <button onclick="global.main.display.exibeVaga('A43')">LOS NATCHOS</button>
+          <button onclick="global.main.display.exibeVaga('A54')">PIZZA KING</button>
+        </div>
       </div>
+
+      <details title="debug">
+        <summary>Debug</summary>
+        <div class="corpo">
+          <p>Escolha o modelo do carro e suas coordenadas:</p>
+          <form onsubmit="global.main.modelo.addCar(event)">
+            <select id="carListDropdown" name="dropdown">
+            </select>
+            <div>
+              <label for="x">x:</label>
+              <input id="x" type="text">
+              <label for="y" style="margin-left: 10px;">y:</label>
+              <input id="y" type="text">
+              <label for="z" style="margin-left: 10px;">z:</label>
+              <input id="z" type="text">
+              <label for="α" style="margin-left: 10px;">α:</label>
+              <input id="α" type="text">
+            </div>
+            <button onclick="">Adicionar Carro</button>
+          </form>
+          <button type="button" onclick="global.main.gravacao.gravar('destinos', event)">Gravar Destinos</button>
+          <button type="button" onclick="global.main.gravacao.gravar('vagas', event)">Gravar Vagas</button>
+          <button type="button" onclick="global.main.modelo.add66Car(event)">Lotar Vagas</button>
+        </div>
+      </details>
+
     </div>
 
   </screen>
