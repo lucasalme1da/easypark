@@ -1,5 +1,4 @@
 #include "calcula_vaga.h"
-
 #include <math.h>
 #include <string.h>
 

@@ -5,7 +5,7 @@
 // Recebe da simulação qual o input seleciona e retorna o input específico
 //É importante que a ordem do vetor de inputs seja a mesma da simulação.
 Destino le_input(Destino* vetor_destinos, int tamanho_vetor) {
-  char comando[] = "pegar input;";
+  char comando[] = "destino;";
   char* resposta = mandar_comando(comando);
 
   int indice_vetor = atoi(resposta);

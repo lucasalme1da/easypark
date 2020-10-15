@@ -6,7 +6,7 @@
 #include "../le_arquivos/le_arquivos.h"
 
 int buscar_posicao_da_melhor_vaga(Vaga* ranking_de_vagas, int numero_de_vagas) {
-  char* string_estado_dos_sensores = mandar_comando("jarrada");
+  char* string_estado_dos_sensores = mandar_comando("sensores;");
   char caractere = ' ';
   int indice_string = 0, tamanho_do_vetor = 0;
 

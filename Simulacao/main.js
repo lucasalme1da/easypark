@@ -6,6 +6,7 @@ import GravacaoCoordenadas from "./classes/GravacaoCoordenadas.js"
 import Engine from "./classes/Engine.js"
 import GerenciadorVagas from "./classes/GerenciadorVagas.js"
 import No from "./classes/No.js"
+import Comunicacao from "./classes/Comunicacao.js"
 const { WebGLRenderer, Vector3, OrbitControls, Scene, PerspectiveCamera, AmbientLight, SpotLight, Clock } = require("three")
 
 const Stats = require("stats.js")
@@ -60,6 +61,7 @@ export default class main {
         const nos = this.interface.gerenciadorNos.nos
         this.entradas = [nos[66], nos[73], nos[71]]
         this.gerenciadorVagas = new GerenciadorVagas({ gerenciadorNos: this.interface.gerenciadorNos })
+        this.comunicacao = new Comunicacao({ gerenciadorVagas: this.gerenciadorVagas })
         this.contagemCarros = 0
 
         //Funções de Debug
