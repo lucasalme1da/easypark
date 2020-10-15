@@ -6,7 +6,11 @@ import GravacaoCoordenadas from "./classes/GravacaoCoordenadas.js"
 import Engine from "./classes/Engine.js"
 import GerenciadorVagas from "./classes/GerenciadorVagas.js"
 import No from "./classes/No.js"
+
+import Comunicacao from "./classes/Comunicacao.js"
+
 import Display from "./classes/Display.js"
+
 const { WebGLRenderer, Vector3, OrbitControls, Scene, PerspectiveCamera, AmbientLight, SpotLight, Clock } = require("three")
 
 const Stats = require("stats.js")
@@ -47,21 +51,23 @@ export default class main {
 
     this.modelo.carregarCeu()
 
+        const plano = await this.modelo.carregarPlano()
+        this.interface = new InterfaceAStar({
+            nomeAtributoPosicao: "posicao",
+            nomeAtributoConexoes: "vizinhos",
+            camera: this.camera,
+            cena: this.scene,
+            base: plano,
+            canvas: this.canvas,
+        })
+        const nos = this.interface.gerenciadorNos.nos
+        this.entradas = [nos[66], nos[73], nos[71]]
+        this.gerenciadorVagas = new GerenciadorVagas({ gerenciadorNos: this.interface.gerenciadorNos })
+        this.comunicacao = new Comunicacao({ gerenciadorVagas: this.gerenciadorVagas })
+        this.contagemCarros = 0
+
     this.modelo.carregarEstacionamento()
 
-    const plano = await this.modelo.carregarPlano()
-    this.interface = new InterfaceAStar({
-      nomeAtributoPosicao: "posicao",
-      nomeAtributoConexoes: "vizinhos",
-      camera: this.camera,
-      cena: this.scene,
-      base: plano,
-      canvas: this.canvas,
-    })
-    const nos = this.interface.gerenciadorNos.nos
-    this.entradas = [nos[66], nos[73], nos[71]]
-    this.gerenciadorVagas = new GerenciadorVagas({ gerenciadorNos: this.interface.gerenciadorNos })
-    this.contagemCarros = 0
 
     //Funções de Debug
     this.testarTodasRotas = () => {

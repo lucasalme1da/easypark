@@ -9,8 +9,8 @@ int main(void) {
   Tag *tags = alocar_vetor_tags(conta_linhas_vagas());
 
   while (1) {
-    char *comando = mandar_comando("Fala a placa");
 
+    char *comando = mandar_comando("idle;");
     char comandoInicial[200];
     strcpy(comandoInicial, comando);
 
