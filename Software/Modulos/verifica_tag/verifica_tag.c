@@ -5,6 +5,9 @@
 
 Tag* alocar_vetor_tags(int tamanho) {
   Tag* vetor_tag = malloc(tamanho * sizeof(Tag));
+  for(int i = 0; i < tamanho; i++){
+      strcpy(vetor_tag[i].id_veiculo,"");
+  }
   return vetor_tag;
 }
 

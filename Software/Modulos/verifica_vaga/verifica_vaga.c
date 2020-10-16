@@ -5,7 +5,7 @@
 #include "../comunicacao/comunicacao.h"
 #include "../le_arquivos/le_arquivos.h"
 
-int buscar_posicao_da_melhor_vaga(Vaga* ranking_de_vagas, int numero_de_vagas) {
+int buscar_posicao_da_melhor_vaga(Vaga* ranking_de_vagas,Tag* tags,int numero_de_vagas) {
   char* string_estado_dos_sensores = mandar_comando("sensores;");
   char caractere = ' ';
   int indice_string = 0, tamanho_do_vetor = 0;
@@ -25,12 +25,14 @@ int buscar_posicao_da_melhor_vaga(Vaga* ranking_de_vagas, int numero_de_vagas) {
   while (caractere != ';') {
     caractere = string_estado_dos_sensores[indice_string++];
     if (caractere != ' ') {
-      vetor_estado_dos_sensores[indice_vetor++] = atoi(&caractere);
+      if(caractere == 49)
+      vetor_estado_dos_sensores[indice_vetor++] = 1;
+      else
+      vetor_estado_dos_sensores[indice_vetor++] = 0;
     }
   }
-
   for (int i = 0; i < numero_de_vagas; i++) {
-    if (vetor_estado_dos_sensores[ranking_de_vagas[i].sensor.id] == 1) {
+    if (vetor_estado_dos_sensores[ranking_de_vagas[i].sensor.id] == 1 && strcmp(tags[ranking_de_vagas[i].sensor.id].id_veiculo,"") == 0) {
       free(vetor_estado_dos_sensores);
       return i;
     }
@@ -40,11 +42,11 @@ int buscar_posicao_da_melhor_vaga(Vaga* ranking_de_vagas, int numero_de_vagas) {
   return -1;
 }
 
-Vaga verifica_vaga(Vaga* ranking_de_vagas) {
+Vaga verifica_vaga(Vaga* ranking_de_vagas,Tag* tags) {
   Vaga vaga_inexistente;
   int numero_de_vagas = conta_linhas_vagas();
   int posicao_da_melhor_vaga =
-      buscar_posicao_da_melhor_vaga(ranking_de_vagas, numero_de_vagas);
+      buscar_posicao_da_melhor_vaga(ranking_de_vagas,tags,numero_de_vagas);
   if (posicao_da_melhor_vaga >= 0) {
     return ranking_de_vagas[posicao_da_melhor_vaga];
   } else {

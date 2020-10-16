@@ -43,6 +43,7 @@ char* mandar_comando(char* dados) {
     fclose(leitura);
   }
   limpar_arquivo(nome_arquivo_recebimento_de_comando_sync);
+  printf("\nResposta recebida: %s\n",comando);
   return comando;
 }
 char* aguardar_comando() {
