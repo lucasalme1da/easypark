@@ -21,7 +21,7 @@ int main(void) {
 
       Vaga *ranking_de_vagas = calcula_vaga(destino, vagas);
 
-      Vaga vaga_disponivel = verifica_vaga(ranking_de_vagas);
+      Vaga vaga_disponivel = verifica_vaga(ranking_de_vagas,tags);
 
       if (strcmp(vaga_disponivel.nome, "Nao ha vagas") != 0) {
         atribuir_vaga(comandoInicial, vaga_disponivel, tags);
