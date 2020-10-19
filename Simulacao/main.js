@@ -13,6 +13,7 @@ import Comunicacao from "./classes/Comunicacao.js"
 
 import Display from "./classes/Display.js"
 import CameraViewer from "./classes/CameraViewer.js"
+import Toast from "./classes/Toaster.js"
 
 const {
   WebGLRenderer,
