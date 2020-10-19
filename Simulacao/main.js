@@ -12,6 +12,7 @@ import ManipuladorInput from "./classes/ManipuladorInput.js"
 import Comunicacao from "./classes/Comunicacao.js"
 
 import Display from "./classes/Display.js"
+import CameraViewer from "./classes/CameraViewer.js"
 
 const {
   WebGLRenderer,
@@ -47,12 +48,12 @@ export default class main {
     this.modelo = new Modelo(this.scene)
     this.clock = new Clock()
     this.camera = new PerspectiveCamera(80, this.canvas.clientWidth / this.canvas.clientHeight, 1, 10000000) // fov, aspect, near, far
-    this.camera.position.set(0, 5, 5)
-    this.camera.lookAt(0, 0, 0)
+    // this.camera.position.set(0, 5, 5)
+    // this.camera.lookAt(0, 0, 0)
 
     this.controls = new OrbitControls(this.camera, this.renderer.domElement)
     this.controls.enableZoom = true
-    this.controls.target.set(0, 0, 0)
+    // this.controls.target.set(0, 0, 0)
 
     const ambientLight = new AmbientLight(0x404040)
     this.scene.add(ambientLight)
@@ -90,7 +91,7 @@ export default class main {
     this.modelo.carregarEstacionamento()
 
     this.camera.position.set(59, 12, -210)
-    this.camera.lookAt(52, 0, -198)
+    // this.camera.lookAt(52, 0, 198)
 
     this.manipuladorInput.KeyW = () => {
       console.log("Gerando carro")
@@ -108,21 +109,14 @@ export default class main {
       }
     }
 
-    let testing = () => {
-      console.log('apertou 1')
-    }
-
-    this.manipuladorInput.Digit1 = testing
-
-    this.manipuladorInput.ControlLeft = () => {
-      this.manipuladorInput.Digit1 = (event) => {
-        console.log(event)
-        this.manipuladorInput.Digit1 = testing
-      }
-    }
-
     console.log("Tecla W Gera um novo carro")
     console.log("Tecla E liga a geração de carros aleatorios")
+
+    this.cameraViewer = new CameraViewer({
+      manipulador: this.manipuladorInput,
+      camera: this.camera,
+      controls: this.controls
+    })
 
     this.animate()
   }

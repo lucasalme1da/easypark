@@ -17,7 +17,6 @@ const {
 
 export default class Modelo {
   constructor(scene) {
-    this.lod = new LOD()
     this.loader = new ColladaLoader()
     this.texture = new TextureLoader()
     this.scene = scene
