@@ -1,3 +1,5 @@
+import Toast from './Toaster.js'
+
 const fs = require('fs')
 
 const { cameras } = require("./data/infoCameras.json")
@@ -20,8 +22,11 @@ export default class CameraViewer {
         this.camera.position.set(...camera)
         this.controls.target.set(...controls)
         console.log(`Exibindo camera ${number}`);
+        new Toast({ message: `Exibindo camera ${number}` })
       } else {
         console.error('A posição da camera e dos controles não pode ser a mesma!')
+        new Toast({ message: `A posição da camera e dos controles não pode ser a mesma!`, error: true })
+
       }
     }
 
@@ -37,6 +42,7 @@ export default class CameraViewer {
         fs.writeFile('./data/infoCameras.json', JSON.stringify(data), () => { })
 
       console.log(`Sobrescrita posição da camera ${number}`);
+      new Toast({ message: `Sobrescrita posição da camera ${number}` })
       reset()
     }
 
