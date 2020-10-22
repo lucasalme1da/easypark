@@ -15,6 +15,15 @@ export default class Engine {
     this.tolerancia = 0.2
   }
 
+  // DEV
+
+  getCars() {
+    return [...this.objetos]
+  }
+
+  // FIM DEV
+
+
   add(objeto) {
     if (!objeto.position) {
       throw new Error("Objeto deve ser uma instancia de Object3D")
@@ -22,9 +31,7 @@ export default class Engine {
     }
     objeto.velocidade = new Vector3(0, 0, 0)
     this.objetos.push(objeto)
-    console.log(objeto)
   }
-
   remove(objeto) {
     const inidice = this.objetos.findIndex(ob => ob == objeto)
     this.objetos.splice(indice, 1)
