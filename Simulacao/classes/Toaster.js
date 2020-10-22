@@ -17,7 +17,6 @@ export default class Toast {
     this.toast.appendChild(this.toastContent)
     this.toast.appendChild(this.toastClose)
     this.toastContainer.appendChild(this.toast)
-    console.log(this.toastContainer, this.toast)
     setTimeout(this.handleClose, 3000)
   }
 

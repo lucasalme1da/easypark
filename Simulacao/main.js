@@ -82,6 +82,12 @@ export default class main {
     this.fila = new Fila()
     this.gerenciadorVagas = new GerenciadorVagas({ gerenciadorNos: this.interface.gerenciadorNos, fila: this.fila })
     this.engine = new Engine({ vagas: this.gerenciadorVagas.vagas })
+    this.cameraViewer = new CameraViewer({
+      manipulador: this.manipuladorInput,
+      camera: this.camera,
+      controls: this.controls,
+      engine: this.engine
+    })
     this.comunicacao = new Comunicacao({ gerenciadorVagas: this.gerenciadorVagas })
     this.display = new Display()
     this.display.canTouch = false
@@ -91,8 +97,8 @@ export default class main {
 
     this.modelo.carregarEstacionamento()
 
-    this.camera.position.set(59, 12, -210)
-    // this.camera.lookAt(52, 0, 198)
+    this.camera.position.set(48.43, 5.46, -198.53)
+    this.controls.target.set(-19.85, -65.27, -21.40)
 
     this.manipuladorInput.KeyW = () => {
       console.log("Gerando carro")
@@ -113,11 +119,6 @@ export default class main {
     console.log("Tecla W Gera um novo carro")
     console.log("Tecla E liga a geração de carros aleatorios")
 
-    this.cameraViewer = new CameraViewer({
-      manipulador: this.manipuladorInput,
-      camera: this.camera,
-      controls: this.controls
-    })
 
     this.animate()
   }
@@ -149,6 +150,7 @@ export default class main {
     carro.placa = this.gerarPlaca()
     carro.position.copy(noInicial.posicao)
     this.engine.add(carro)
+    this.cameraViewer.changeCarLast()
     if (destinoGerado === false) await this.engine.go(carro, noTotem)
     let destino
     if (destinoGerado === false) {
@@ -194,6 +196,7 @@ export default class main {
       await this.engine.go(carro, noSaida)
       this.scene.remove(carro)
       const indicePlaca = this.placas.findIndex(placa => placa == carro.placa)
+      this.engine.objetos.splice(carro, 1)
       this.placas.splice(indicePlaca, 1)
     }
     if (this.habilitarSaidaAutomatica) setTimeout(carro.sair.bind(this), this.tempoCarroSairVaga * 1000)
@@ -203,6 +206,7 @@ export default class main {
 
   animate() {
     this.stats.begin()
+    this.cameraViewer.updateCarViewer()
     this.renderer.render(this.scene, this.camera)
     this.controls.update()
     this.modelo.updateLights(this.clock)

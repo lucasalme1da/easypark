@@ -5,12 +5,14 @@ const fs = require('fs')
 const { cameras } = require("./data/infoCameras.json")
 
 export default class CameraViewer {
-  constructor({ manipulador, camera, controls }) {
+  constructor({ manipulador, camera, controls, engine }) {
 
     this.manipuladorInput = manipulador
     this.camera = camera
     this.controls = controls
-
+    this.engine = engine
+    this.carViewer = false
+    this.currentCarIndex = 0
     this.load()
   }
 
@@ -21,6 +23,8 @@ export default class CameraViewer {
       if (camera.toString() !== controls.toString()) {
         this.camera.position.set(...camera)
         this.controls.target.set(...controls)
+        this.controls.update()
+
         console.log(`Exibindo camera ${number}`);
         new Toast({ message: `Exibindo camera ${number}` })
       } else {
@@ -67,7 +71,68 @@ export default class CameraViewer {
     reset()
 
     this.manipuladorInput.ControlLeft = () => savePosition()
+
+    this.manipuladorInput.Digit7 = this.toggleCarView
+    this.manipuladorInput.Period = this.changeCarRight
+    this.manipuladorInput.Comma = this.changeCarLeft
+
+
   }
 
+  changeCarRight = () => {
+    let cars = this.engine.getCars()
+    if (cars.length > 1) {
+      this.currentCarIndex === cars.length - 1 ?
+        this.currentCarIndex = 0 :
+        this.currentCarIndex++
+      new Toast({ message: `Observando próximo carro` })
+    } else {
+      new Toast({ message: "Só há um carro para observar", error: true })
+    }
+  }
+
+  changeCarLeft = () => {
+    let cars = this.engine.getCars()
+    if (cars.length > 1) {
+      this.currentCarIndex === 0 ?
+        this.currentCarIndex = cars.length - 1 :
+        this.currentCarIndex--
+      new Toast({ message: `Observando carro anterior` })
+    } else {
+      new Toast({ message: "Só há um carro para observar", error: true })
+    }
+  }
+
+  changeCarLast = () => {
+    this.currentCarIndex = this.engine.getCars().length - 1
+  }
+
+  updateCarViewer = async () => {
+    if (this.carViewer) {
+      let cars = this.engine.getCars()
+      if (cars.length === 0) {
+        new Toast({ message: `Nenhum carro para ser observado`, error: 1 })
+        return this.carViewer = false
+      }
+      let car = this.engine.getCars()[this.currentCarIndex]
+      this.controls.object.position.set(
+        car.position.x - Math.sin(car.rotation.z) * 8,
+        car.position.y + 5,
+        car.position.z - Math.cos(car.rotation.z) * 8
+      )
+      this.controls.target.set(car.position.x, car.position.y, car.position.z)
+      this.controls.update()
+
+    }
+  }
+
+  toggleCarView = () => {
+    this.carViewer = !this.carViewer
+    this.carViewer ?
+      this.engine.getCars().length !== 0 &&
+      new Toast({ message: `Modo de visualização de carros ligado` }) :
+      new Toast({ message: `Modo de visualização de carros desligado` })
+
+  }
 
 }

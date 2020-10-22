@@ -9,13 +9,53 @@ details {
 
 }
 
+.splash {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  background: linear-gradient(to right, #243B55, #141E30);
+  display:flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.splash-container {
+  font-size: xx-large;
+  color: lightgrey;
+  text-transform: uppercase;
+  text-align: center;
+  font-family: 'IBM Plex Serif', serif;
+  letter-spacing: 30px;
+  animation: toast-op-in 2s ease-in-out forwards;
+}
+
+.splash-container h1 {
+  margin-left: 30px;
+}
+
+.line {
+  width: 100%;
+  height: 1px;
+  background-color: gray;
+  display: flex;
+  justify-content: flex-start;
+  transition: all 0.3s ease-in;
+}
+
+.load {
+  width: 10%;
+  height: 3px;
+  background-color: lightgray;
+  /* transition: all 1s ease-in; */
+
+}
+
 .toast-container {
   width: 550px;
   height: 406px;
   position: absolute;
   z-index: 100000;
   bottom: 0;
-  /* background-color: cyan; */
   opacity: 1;
   padding: 20px 0;
   display: flex;

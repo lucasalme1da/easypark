@@ -17,6 +17,8 @@ const {
 
 export default class Modelo {
   constructor(scene) {
+    this.splash = document.querySelector('#splash')
+    this.loadBar = document.querySelector('#load')
     this.loader = new ColladaLoader()
     this.texture = new TextureLoader()
     this.scene = scene
@@ -80,7 +82,17 @@ export default class Modelo {
           resolve(object)
         },
         progress => {
-          console.log(`Carregando modelo... ${Math.floor((progress.loaded / progress.total) * 100)}%`)
+          let percent = Math.floor((progress.loaded / progress.total) * 100)
+          console.log(this.loadBar.style["width"])
+          this.loadBar.style["width"] = `${percent}%`
+          console.log(`Carregando modelo... ${percent}%`)
+          if (percent == 100)
+            setTimeout(() => {
+              this.splash.classList.add('toast-close')
+              setTimeout(() => {
+                this.splash.style["display"] = "none"
+              }, 400)
+            }, 2500)
         },
         err => {
           reject(console.error(`Erro ao carregar o arquivo do caminho:\n${filePath}`))
