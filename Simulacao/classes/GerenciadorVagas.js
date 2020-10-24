@@ -2,9 +2,10 @@ import Vaga from "./Vaga.js"
 const fs = require("fs")
 const path = require("path")
 export default class GerenciadorVagas {
-    constructor({ gerenciadorNos, fila }) {
+    constructor({ gerenciadorNos, fila, modelo }) {
         this.vagas = []
         this.fila = fila
+        this.modelo = modelo
         this.gerenciadorNos = gerenciadorNos
         this.lerVagasGerenciadorNos()
     }
@@ -17,7 +18,7 @@ export default class GerenciadorVagas {
             dadosArquivo.split("\n").forEach((vaga, index) => {
                 const [nome] = vaga.split(" ")
                 const no = vagas[index]
-                const vagaOb = new Vaga({ id: index, nome, no, fila: this.fila })
+                const vagaOb = new Vaga({ modelo: this.modelo, id: index, nome, no, fila: this.fila })
                 no.vaga = vagaOb
                 this.vagas.push(vagaOb)
             })
@@ -42,6 +43,4 @@ export default class GerenciadorVagas {
             console.log("Erro ao carregar vagas.txt", erro)
         }
     }
-
-    iniciarVagas() {}
 }
