@@ -73,9 +73,9 @@ export default class Engine {
             const vetor1 = new Vector3().subVectors(a1.posicao, a0.posicao)
             const vetor2 = new Vector3().subVectors(a2.posicao, a1.posicao)
             const angulo = MathUtils.radToDeg(vetor1.angleTo(vetor2))
-            const tolerancia = 50
+            const tolerancia = 80
             if (angulo >= 90 - tolerancia && angulo <= 90 + tolerancia) {
-                let pontos = 80
+                let pontos = 50
                 novaRota.splice(indice, 3, ...this.interfaceAStar.pegarPontosDeCurva([a0, a1, a2], pontos))
                 indice += pontos - 10
             }

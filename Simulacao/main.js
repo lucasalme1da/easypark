@@ -157,7 +157,6 @@ export default class main {
         comunicacao.registrarComando("sensores", () => {
             console.log(`Enviando estado sensores ${this.gerenciadorVagas.vagas.map(vaga => vaga.estadoSensor).join(" ")}`)
             return `${this.gerenciadorVagas.vagas.map(vaga => vaga.estadoSensor).join(" ")};`
-            //return "0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0;"
         })
         comunicacao.registrarComando(
             "vaga",
