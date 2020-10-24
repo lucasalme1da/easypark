@@ -29,6 +29,7 @@ export default class main {
         this.tempoGeracaoCarros = 5
         this.habilitarSaidaAutomatica = true
         this.geracaoAutomaticaCarros = false
+        this.estacionarErrado = false
         this.manipuladorInput = new ManipuladorInput()
     }
 
@@ -73,7 +74,7 @@ export default class main {
         const nos = this.interface.gerenciadorNos.nos
         this.entradas = [nos[66], nos[73], nos[71]]
         this.fila = new Fila()
-        this.gerenciadorVagas = new GerenciadorVagas({ gerenciadorNos: this.interface.gerenciadorNos, fila: this.fila })
+        this.gerenciadorVagas = new GerenciadorVagas({ modelo: this.modelo, gerenciadorNos: this.interface.gerenciadorNos, fila: this.fila })
         this.engine = new Engine({ vagas: this.gerenciadorVagas.vagas, interfaceAStar: this.interface })
         this.cameraViewer = new CameraViewer({
             manipulador: this.manipuladorInput,
@@ -91,6 +92,11 @@ export default class main {
 
         this.camera.position.set(48.43, 5.46, -198.53)
         this.controls.target.set(-19.85, -65.27, -21.4)
+
+        this.manipuladorInput.KeyR = () => {
+            console.log("Próximo carro irá estacionar errado")
+            this.estacionarErrado = true
+        }
 
         this.manipuladorInput.KeyW = () => {
             console.log("Gerando carro")
@@ -167,8 +173,6 @@ export default class main {
             true
         )
         const [[nomeVaga]] = await this.fila.executar([async () => await comunicacao.mensagemSemRetorno(`A ${carro.placa};`), async () => await comunicacao.escutarMensagens()])
-        //  comunicacao.mensagemSemRetorno(`A ${carro.placa};`)
-        //  const [nomeVaga] = await comunicacao.escutarMensagens()
         console.log(nomeVaga)
         if (nomeVaga == "Nao") {
             if (destinoGerado === false) this.display.exibeVaga("Não há vagas :(")
@@ -179,9 +183,28 @@ export default class main {
             return
         }
         if (destinoGerado === false) this.display.exibeVaga(nomeVaga.toUpperCase())
+
+        //Gerando vaga errada
+        let vagaErrada
+        if (this.estacionarErrado) {
+            let numeroVaga = parseInt(nomeVaga.substring(1, 3))
+            let numeroErrado = numeroVaga
+            while (numeroErrado == numeroVaga) {
+                numeroErrado = Math.floor(Math.random() * 66) + 1
+            }
+            const vagaErradaNome = `a${numeroErrado.toString().padStart(2, "0")}`
+            vagaErrada = this.gerenciadorVagas.vagas.find(vaga => vaga.nome == vagaErradaNome)
+            console.log("Vaga errada ", vagaErradaNome)
+        }
+        //
+
         const vaga = this.gerenciadorVagas.vagas.find(vaga => vaga.nome == nomeVaga)
-        await this.engine.go(carro, vaga.no)
+
+        await this.engine.go(carro, this.estacionarErrado ? vagaErrada.no : vaga.no)
         //Sair depois de um tempo
+        carro.irVagaCerta = async () => {
+            await this.engine.go(carro, vaga.no, false)
+        }
         carro.sair = async () => {
             await this.engine.go(carro, noSaida)
             this.scene.remove(carro)
@@ -190,7 +213,8 @@ export default class main {
             this.engine.objetos.splice(indiceCarro, 1)
             this.placas.splice(indicePlaca, 1)
         }
-        if (this.habilitarSaidaAutomatica) setTimeout(carro.sair.bind(this), this.tempoCarroSairVaga * 1000)
+        if (this.habilitarSaidaAutomatica && this.estacionarErrado == false) setTimeout(carro.sair.bind(this), this.tempoCarroSairVaga * 1000)
+        if (this.estacionarErrado) this.estacionarErrado = false
     }
 
     animate() {

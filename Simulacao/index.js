@@ -63,7 +63,7 @@ const mainMenuTemplate = [
         label: "Devtool",
         accelerator: "Ctrl+D",
         click() {
-            mainWindow.webContents.openDevToosoftware()
+            mainWindow.webContents.openDevTools()
         },
     },
     {

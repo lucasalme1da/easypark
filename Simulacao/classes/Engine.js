@@ -85,7 +85,7 @@ export default class Engine {
         //retorna a rota modificada
         //verificar quais pontos formam uma curva
     }
-    async go(modelo3D, noFinal) {
+    async go(modelo3D, noFinal, desalocar = true) {
         //modelo3D precisa ter um atributo no inicial
         if (modelo3D.noInicial === undefined) {
             throw new Error('Modelo3D deve ter um parametro "noInicial" do tipo No')
@@ -131,7 +131,7 @@ export default class Engine {
         const vagaFinal = this.vagas.find(vaga => vaga.no == noFinal)
         if (vagaFinal) vagaFinal.alocarCarro(modelo3D)
         const vagaInicial = this.vagas.find(vaga => vaga.no == modelo3D.noInicial)
-        if (vagaInicial) vagaInicial.desalocarCarro()
+        if (vagaInicial && desalocar) vagaInicial.desalocarCarro()
 
         modelo3D.noInicial = rota[rota.length - 1]
         modelo3D.velocidade = this.estacionario.clone()
