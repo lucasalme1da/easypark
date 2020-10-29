@@ -1,6 +1,15 @@
-const { Path, Clock, BufferGeometry, QuadraticBezierCurve, Line, LineBasicMaterial, Vector2, Vector3, Quaternion, Euler, MathUtils } = require("three")
 import BuscaRota from "./BuscaRota.js"
-import No from "./No.js"
+
+const {
+  Path,
+  Clock,
+  Vector2,
+  Vector3,
+  Quaternion,
+  Euler,
+  MathUtils
+} = require("three")
+
 export default class Engine {
   constructor({ vagas, interfaceAStar }) {
     //Objetos que terao movimento

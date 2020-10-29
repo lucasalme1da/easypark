@@ -1,6 +1,7 @@
 const path = require("fs")
 const { data } = require("./data/infoCarros.json")
 const { totens } = require("./data/infoTotens.json")
+
 import ColladaLoader from "./ColladaLoader.js"
 
 const {
